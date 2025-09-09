@@ -12,7 +12,3 @@ variable "availability_zones" {
   #default = ["ap-south-1a", "ap-south-1b"]
 }
 
-
-variable "availability_zones" {
-  type = list(string)
-}
