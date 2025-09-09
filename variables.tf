@@ -13,13 +13,6 @@ variable "key_name" {
   default = "k8s.pem"
 }
 
-variable "ami_id" {
-  type = string
-}
-
-variable "instance_type" {
-  type = string
-}
 
 variable "subnet_id" {
   type = string
