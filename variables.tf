@@ -12,5 +12,5 @@ variable "subnet_ids" {
 }
 variable "vpc_id" {}
 variable "key_name" {
-  default = "k8s.pem
+  default = "k8s.pem"
 }
