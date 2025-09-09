@@ -21,6 +21,7 @@ resource "aws_instance" "openproject" {
               sudo apt update -y
               sudo apt install docker.io -y
               sudo systemctl start docker
+              sudo systemctl enable docker
               sudo docker run -d -p 8080:80 openproject/community:latest
               EOF
 
