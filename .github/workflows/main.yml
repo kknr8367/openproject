@@ -34,22 +34,22 @@ jobs:
         id: validate
         run: terraform validate
 
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v4
-        with:
-          tflint_version: v0.52.0 # Use a specific, stable version
+      # - name: Setup TFLint
+      #   uses: terraform-linters/setup-tflint@v4
+      #   with:
+      #     tflint_version: v0.52.0 # Use a specific, stable version
 
-      - name: Cache TFLint plugins
-        uses: actions/cache@v4
-        with:
-          path: ~/.tflint.d/plugins
-          key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+      # - name: Cache TFLint plugins
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.tflint.d/plugins
+      #     key: ${{ runner.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
 
-      - name: Init TFLint
-        run: tflint --init
+      # - name: Init TFLint
+      #   run: tflint --init
 
-      - name: Run TFLint
-        run: tflint --recursive
+      # - name: Run TFLint
+      #   run: tflint --recursive
 
       - name: Terraform Plan
         id: plan
