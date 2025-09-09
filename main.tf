@@ -9,7 +9,6 @@ module "ec2" {
   instance_type      = "t2.micro"
   subnet_id          = module.vpc.public_subnet_ids[0]
   security_group_id  = module.security.security_group_id
-  key_name           = var.key_name
 }
 
 module "alb" {
