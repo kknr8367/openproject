@@ -1,0 +1,19 @@
+resource "aws_instance" "openproject" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  subnet_id     = var.subnet_id
+  security_groups = [var.security_group_id]
+  key_name      = var.key_name
+
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt update -y
+              sudo apt install docker.io -y
+              sudo systemctl start docker
+              sudo docker run -d -p 8080:80 openproject/community:latest
+              EOF
+
+  tags = {
+    Name = "OpenProject-EC2"
+  }
+}
