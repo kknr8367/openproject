@@ -15,25 +15,18 @@ resource "aws_instance" "openproject" {
   subnet_id     = var.subnet_id
   security_groups = [var.security_group_id]
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt update -y
-              sudo apt install docker.io -y
-              #!/bin/bash
-
-# Update all installed packages on the instance
-              sudo yum update -y
-
-# Install Docker
-              sudo yum install docker -y
-
-              sudo systemctl start docker
-              sudo systemctl enable docker
-              sudo usermod -aG docker ec2-user
-              sudo systemctl start docker
-              sudo systemctl enable docker
-              sudo docker run -d -p 8080:80 openproject/community:latest
-              EOF
+  provisioner "remote-exec" {
+    inline = [
+      "sudo dnf update -y",
+      "sudo dnf install -y docker",
+      "sudo systemctl enable docker",
+      "sudo systemctl start docker",
+      "sudo usermod -aG docker ec2-user",
+      "sg docker -c",
+      "sudo mkdir -p /var/lib/openproject/{pgdata,assets}",
+      "sudo docker run -d --name openproject -p 8080:80 -e OPENPROJECT_HOST_NAME=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4) -e OPENPROJECT_SECRET_KEY_BASE=$(openssl rand -hex 32) -e OPENPROJECT_HTTPS=false -v /var/lib/openproject/pgdata:/var/openproject/pgdata -v /var/lib/openproject/assets:/var/openproject/assets openproject/openproject:16"
+    ]
+  }
 
   tags = {
     Name = "OpenProject-EC2"
