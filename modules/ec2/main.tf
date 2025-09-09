@@ -1,3 +1,14 @@
+terraform {
+  required_version = ">= 1.0.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.0"
+    }
+  }
+}
+
 resource "aws_instance" "openproject" {
   ami           = var.ami_id
   instance_type = var.instance_type
