@@ -6,7 +6,7 @@ module "security" {
 module "ec2" {
   source             = "./modules/ec2"
   ami_id             = var.ami_id
-  instance_type      = "t2.micro"
+  instance_type      = "t2.xlarge"
   subnet_id          = module.vpc.public_subnet_ids[0]
   security_group_id  = module.security.security_group_id
 }
