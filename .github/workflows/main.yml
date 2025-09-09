@@ -51,6 +51,22 @@ jobs:
       # - name: Run TFLint
       #   run: tflint --recursive
 
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@v1.277.0
+        with:
+          directory: .
+          framework: terraform
+          soft_fail: false 
+          output_format: sarif
+          output_file_path: checkov.sarif
+
+      - name: Upload SARIF report to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: success() || failure()
+        with:
+          sarif_file: checkov.sarif
+
       - name: Terraform Plan
         id: plan
         # if: github.event_name == 'pull_request'
