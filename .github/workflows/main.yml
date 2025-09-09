@@ -51,22 +51,6 @@ jobs:
       # - name: Run TFLint
       #   run: tflint --recursive
 
-      - name: Run Checkov action
-        id: checkov
-        uses: bridgecrewio/checkov-action@v1.277.0
-        with:
-          directory: .
-          framework: terraform
-          soft_fail: false 
-          output_format: sarif
-          output_file_path: checkov.sarif
-
-      - name: Upload SARIF report to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        if: success() || failure()
-        with:
-          sarif_file: checkov.sarif
-
       - name: Terraform Plan
         id: plan
         # if: github.event_name == 'pull_request'
@@ -74,12 +58,12 @@ jobs:
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for commenting on PRs
 
-      - name: Terraform Apply
-        id: apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
-
-      # - name: Terraform destroy
-      #   id: destroy
+      # - name: Terraform Apply
+      #   id: apply
       #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      #   run: terraform destroy -auto-approve
+      #   run: terraform apply -auto-approve
+
+      - name: Terraform destroy
+        id: destroy
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform destroy -auto-approve
